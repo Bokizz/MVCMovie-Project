@@ -38,9 +38,9 @@
                 <span asp-validation-for="Book.Publisher" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Book.FrontPage" class="control-label">Front Page</label>
-                <input asp-for="Book.FrontPage" class="form-control" />
-                <span asp-validation-for="Book.FrontPage" class="text-danger"></span>
+                <label asp-for="FrontPageFile" class="control-label"></label>
+                <input asp-for="FrontPageFile" type="file" class="form-control" />
+                <span asp-validation-for="FrontPageFile" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Book.DownloadUrl" class="control-label">Download link</label>
@@ -58,7 +58,6 @@
                         asp-items="Model.GenreList"> </select>
                 <span asp-validation-for="SelectedGenres" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

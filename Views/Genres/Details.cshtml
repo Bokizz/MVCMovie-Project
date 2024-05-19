@@ -19,6 +19,12 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="btn-group-vertical">
+        <td>
+        </td>
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+        {
+            <a class="btn btn-info btn-sm" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+        }|
+        <a class="btn btn-secondary btn-sm" asp-action="Index">Back to List</a>
+    </div>

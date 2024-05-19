@@ -6,30 +6,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookProject1.Data;
+using Microsoft.AspNetCore.Identity;
+using BookProject1.Areas.Identity.Data;
+using BookProject1.ViewModels;
 using BookProject1.Models;
 
-namespace BookProject1.Controllers
+namespace BookStore.Controllers
 {
     public class ReviewsController : Controller
     {
         private readonly BookProject1Context _context;
+        private readonly UserManager<BookProject1User> _userManager;
 
-        public ReviewsController(BookProject1Context context)
+        public ReviewsController(BookProject1Context context, UserManager<BookProject1User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Reviews
         public async Task<IActionResult> Index()
         {
-            var bookProject1Context = _context.Review.Include(r => r.Book);
-            return View(await bookProject1Context.ToListAsync());
+            var bookStoreContext = _context.Review.Include(r => r.Book);
+            return View(await bookStoreContext.ToListAsync());
         }
 
         // GET: Reviews/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Review == null)
             {
                 return NotFound();
             }
@@ -46,10 +51,22 @@ namespace BookProject1.Controllers
         }
 
         // GET: Reviews/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int id)
         {
-            ViewData["BookId"] = new SelectList(_context.Book, "Id", "Title");
-            return View();
+            var book = await _context.Book.Where(s => s.Id == id).SingleOrDefaultAsync();
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            var bookReview = new BookReview
+            {
+                Title = book.Title,
+                Id = book.Id,
+                Review = new Review()
+            };
+
+            return View(bookReview);
         }
 
         // POST: Reviews/Create
@@ -57,22 +74,36 @@ namespace BookProject1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BookId,AppUser,Comment,Rating")] Review review)
+        public async Task<IActionResult> Create(BookReview viewModel)
         {
-            if (ModelState.IsValid)
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
             {
-                _context.Add(review);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return NotFound("User not found");
             }
-            ViewData["BookId"] = new SelectList(_context.Book, "Id", "Title", review.BookId);
-            return View(review);
+
+            var book = await _context.Book.FindAsync(viewModel.Id);
+            if (book == null)
+            {
+                return NotFound("Book not found");
+            }
+
+            var newEntry = new Review
+            {
+                Comment = viewModel.Review.Comment,
+                Rating = viewModel.Review.Rating,
+                AppUser = user.Email,
+                BookId = book.Id
+            };
+            _context.Review.Add(newEntry); // Use the correct DbSet to add the new entry
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Reviews/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Review == null)
             {
                 return NotFound();
             }
@@ -82,7 +113,7 @@ namespace BookProject1.Controllers
             {
                 return NotFound();
             }
-            ViewData["BookId"] = new SelectList(_context.Book, "Id", "Title", review.BookId);
+            ViewData["BookId"] = new SelectList(_context.Set<Book>(), "Id", "Title", review.BookId);
             return View(review);
         }
 
@@ -118,14 +149,14 @@ namespace BookProject1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookId"] = new SelectList(_context.Book, "Id", "Title", review.BookId);
+            ViewData["BookId"] = new SelectList(_context.Set<Book>(), "Id", "Id", review.BookId);
             return View(review);
         }
 
         // GET: Reviews/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Review == null)
             {
                 return NotFound();
             }
@@ -146,6 +177,10 @@ namespace BookProject1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (_context.Review == null)
+            {
+                return Problem("Entity set 'BookStoreContext.Review'  is null.");
+            }
             var review = await _context.Review.FindAsync(id);
             if (review != null)
             {
@@ -158,7 +193,7 @@ namespace BookProject1.Controllers
 
         private bool ReviewExists(int id)
         {
-            return _context.Review.Any(e => e.Id == id);
+            return (_context.Review?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

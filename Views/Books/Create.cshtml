@@ -1,4 +1,4 @@
-﻿@model BookProject1.Models.Book
+﻿@model BookProject1.ViewModels.BookGenreCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -10,46 +10,54 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form method="post" asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="Book.Title" class="control-label"></label>
+                <input asp-for="Book.Title" class="form-control" />
+                <span asp-validation-for="Book.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="YearPublished" class="control-label">Year published</label>
-                <input asp-for="YearPublished" class="form-control" />
-                <span asp-validation-for="YearPublished" class="text-danger"></span>
+                <label asp-for="Book.YearPublished" class="control-label"></label>
+                <input asp-for="Book.YearPublished" class="form-control" />
+                <span asp-validation-for="Book.YearPublished" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NumPages" class="control-label">Number of Pages</label>
-                <input asp-for="NumPages" class="form-control" />
-                <span asp-validation-for="NumPages" class="text-danger"></span>
+                <label asp-for="Book.NumPages" class="control-label"></label>
+                <input asp-for="Book.NumPages" class="form-control" />
+                <span asp-validation-for="Book.NumPages" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="Book.Description" class="control-label"></label>
+                <input asp-for="Book.Description" class="form-control" />
+                <span asp-validation-for="Book.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Publisher" class="control-label"></label>
-                <input asp-for="Publisher" class="form-control" />
-                <span asp-validation-for="Publisher" class="text-danger"></span>
+                <label asp-for="Book.Publisher" class="control-label"></label>
+                <input asp-for="Book.Publisher" class="form-control" />
+                <span asp-validation-for="Book.Publisher" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FrontPage" class="control-label">Front Page</label>
-                <input asp-for="FrontPage" class="form-control" />
-                <span asp-validation-for="FrontPage" class="text-danger"></span>
+                <label asp-for="FrontPageFile" class="control-label"></label>
+                <input asp-for="FrontPageFile" type="file" class="form-control" />
+                <span asp-validation-for="FrontPageFile" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DownloadUrl" class="control-label">Download link</label>
-                <input asp-for="DownloadUrl" class="form-control" />
-                <span asp-validation-for="DownloadUrl" class="text-danger"></span>
+                <label asp-for="PdfFile" class="control-label"></label>
+                <input asp-for="PdfFile" type="file" class="form-control" />
+                <span asp-validation-for="PdfFile" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AuthorId" class="control-label">Author</label>
-                <select asp-for="AuthorId" class ="form-control" asp-items="ViewBag.AuthorId"></select>
+                <label asp-for="Book.AuthorId" class="control-label"></label>
+                <select asp-for="Book.AuthorId" class="form-control" asp-items="ViewBag.AuthorId"></select>
+                <span asp-validation-for="Book.AuthorId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SelectedGenresCreate" class="control-label">Genres</label>
+                <select asp-for="SelectedGenresCreate" class="form-control" asp-items="@Model.GenreListCreate" multiple>
+                    <!-- Render the list of genres as options -->
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -64,4 +72,11 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#SelectedGenresCreate").select2();
+        });
+    </script>
 }

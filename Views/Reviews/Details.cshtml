@@ -10,11 +10,11 @@
     <h4>Review</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Book)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Book.Title)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Book.FrontPage)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.AppUser)
@@ -33,6 +33,12 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Rating)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Book)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Book.Title)
         </dd>
     </dl>
 </div>

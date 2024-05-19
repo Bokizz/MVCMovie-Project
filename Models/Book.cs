@@ -1,4 +1,6 @@
 ﻿using BookProject1.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 
@@ -8,7 +10,7 @@ namespace BookProject1.Models
     {
         public int Id { get; set; }
 
-        [StringLength(100, MinimumLength = 3)]
+        [StringLength(100, MinimumLength = 2)]
         [Required]
         public string? Title { get; set; }
 
@@ -32,5 +34,6 @@ namespace BookProject1.Models
         public ICollection<BookGenre>? BookGenres { get; set; }
         public ICollection<Review>? Reviews { get; set; }
         public ICollection<UserBooks>? UserBooks { get; set; }
+
     }
 }

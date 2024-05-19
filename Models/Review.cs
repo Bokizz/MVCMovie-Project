@@ -11,7 +11,7 @@ namespace BookProject1.Models
 
         [StringLength(450, MinimumLength = 3)] public string? AppUser { get; set; }
         [StringLength(500, MinimumLength = 3)] public string? Comment { get; set; }
-        public int Rating { get; set; }
+        public int Rating { get; set; } 
         
     }
 }

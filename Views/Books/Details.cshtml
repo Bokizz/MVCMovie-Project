@@ -4,27 +4,28 @@
     ViewData["Title"] = "Details";
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
 <h1>Details</h1>
 
 <div>
     <h4>Book</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
+    <dl>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Title)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.YearPublished)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.YearPublished)
         </dd>
         <dt class="col-sm-2">
-        <a>Rating:</a>
+            <a>Rating:</a>
         </dt>
         <dd class="col-sm-10">
             @{
@@ -34,19 +35,21 @@
                     sumOfRatings += item.Rating;
                 }
                 int averageRating = 0;
-                if (Model.Reviews.Count > 0){
+                if (Model.Reviews.Count > 0)
+                {
                     averageRating = sumOfRatings / Model.Reviews.Count;
                 }
-                for(int i = 0;i < averageRating; i++){
+                for (int i = 0; i < averageRating; i++)
+                {
                     <span class="fa fa-star checked"></span>
                 }
-        <br />
-        }
+                <br />
+            }
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NumPages)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NumPages)
         </dd>
         <dt class="col-sm-2">
@@ -60,30 +63,31 @@
                 </a> <br />
             }
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Publisher)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Publisher)
         </dd>
-        @if (User.Identity.IsAuthenticated){
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DownloadUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            <a href="@Html.DisplayFor(model => model.DownloadUrl)">Download</a>
-        </dd>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DownloadUrl)
+            </dt>
+            <dd class="col-sm-10">
+                <a href="@Html.DisplayFor(model => model.DownloadUrl)">Download</a>
+            </dd>
         }
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Author)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Author.FullName)
         </dd>
         <h4 class="mt-5">Reviews</h4>
@@ -121,5 +125,6 @@
 <style>
     .checked {
         color: orange;
-    }</style>
-        
+    }
+</style>
+

@@ -5,61 +5,87 @@
 }
 @using System.IO
 <style>
-    .card {
-        border-radius: 20px;
-        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        display: flex;
-        flex-direction: column;
-        cursor: pointer;
+    .container-lg {
+        padding: 20px; /* Add padding to the container */
+        overflow-x: hidden; /* Hide horizontal overflow */
     }
-    .naslov{
-        
+
+    .card {
+        width: 100%; /* Ensure cards take full width */
+        max-width: 800px; /* Set maximum width of each card */
+        display: flex; /* Use flexbox for layout */
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 20px; /* Add space between cards */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
         .card:hover {
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            transform: scale(1.04);
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02);
         }
 
     .card-img-top {
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
+        width: 200px; /* Set width of the image */
+        height: auto; /* Maintain aspect ratio */
+        border-top-left-radius: 20px; /* Rounded corners for image */
+        border-bottom-left-radius: 20px;
+        flex-shrink: 0; /* Don't allow image to shrink */
     }
 
-    .card-footer {
-        
+    .card-body {
+        padding: 20px;
         display: flex;
-        
+        flex-direction: column;
+        justify-content: space-between;
+        flex-grow: 1; /* Allow content to grow and take remaining space */
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .card-text {
+        margin-bottom: 10px;
+    }
+
+    .list-group-item {
+        border: none;
+        padding: 5px 0;
     }
 
     .button-container {
-        /* Ensure buttons expand to fill the available space */
-        flex-grow: 1;
         display: flex;
-        justify-content:center;
-        
+        justify-content: flex-end;
     }
 
-        .button-container button {
-           
-            margin-left: 10px; /* Add space between buttons */
-            margin-right: 10px;
+        .button-container a {
+            margin-left: 10px;
         }
 
-    .card.smooth-transition {
+    .smooth-transition {
         transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    
+
+    h1,
+    .btn-outline-dark,
+    form {
+        margin-bottom: 20px;
+    }
 </style>
+
 <div class="container-lg">
-    <h1 class="mt-5 text-center">BookNogging's Catalog</h1>
+    <h1 class="mt-5 text-center b">BookNogging's Catalog</h1>
     <br />
     <br />
 
     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
         <p>
-            <a asp-action="Create" class="btn btn-outline-dark ">Create New</a>
+            <a asp-action="Create" class="btn btn-outline-dark">Create New</a>
         </p>
     }
     <form class="row g-3 justify-content-center" asp-controller="Books" asp-action="Index" method="get">
@@ -86,63 +112,66 @@
     <div class="row mt-4">
         @foreach (var item in Model.Books)
         {
-            <div class="col-md-4 mb-4">
-                
-                <div class="card h-100 ">
-                    <a asp-action="Details" asp-route-id="@item.Id">
-                    <div style="height: 600px; overflow: hidden;">
-                        <img src="@Html.DisplayFor(modelItem => item.FrontPage)" class="card-img-top" alt="Book cover">
-                    </div>
-                    </a>
+            <div class="col-md-8 offset-md-2">
+                <div class="card smooth-transition">
                     <div class="card-body">
-                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
-                        <ul class="list-group list-group-flush">
-
-                            <li class="list-group-item">
-                                Author: <a asp-controller="Authors" asp-action="Details" asp-route-id="@item.AuthorId">
-                                    @Html.DisplayFor(modelItem => item.Author.FullName)</a>
-                            </li>
-                            <li class="list-group-item">Published: @Html.DisplayFor(modelItem => item.YearPublished)</li>
-                            <li class="list-group-item">Publisher: @Html.DisplayFor(modelItem => item.Publisher)</li>
-                            <li class="list-group-item">
-                                Genres:
-                                @foreach (var genre in item.BookGenres)
-                                {
-                                    <a>@genre.Genre.GenreName</a>
-                                    if (!genre.Equals(item.BookGenres.Last()))
-                                    {
-                                        <span>,</span>
-                                    }
-                                }
-                            </li>
-                        </ul>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img src="@Html.DisplayFor(modelItem => item.FrontPage)" class="card-img-top" alt="Book cover">
+                            </div>
+                            <div class="col-md-8">
+                                <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+                                <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <strong>Author:</strong><a asp-controller="Authors" asp-action="Details" asp-route-id="@item.AuthorId">
+                                            @Html.DisplayFor(modelItem => item.Author.FullName)
+                                        </a>
+                                    </li>
+                                    <li class="list-group-item"><strong>Published:</strong> @Html.DisplayFor(modelItem => item.YearPublished)</li>
+                                    <li class="list-group-item"><strong>Publisher:</strong> @Html.DisplayFor(modelItem => item.Publisher)</li>
+                                    <li class="list-group-item">
+                                        <strong>Genres:</strong>
+                                        @foreach (var genre in item.BookGenres)
+                                        {
+                                            <a>@genre.Genre.GenreName</a>
+                                            @if (!genre.Equals(item.BookGenres.Last()))
+                                            {
+                                                <span>,</span>
+                                            }
+                                        }
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-footer ">
+                    <div class="card-footer">
                         <div class="button-container">
                             <a class="btn btn-outline-dark" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        @if (User.Identity.IsAuthenticated)
-                        {
+                            @if (User.Identity.IsAuthenticated)
+                            {
                                 @if (User.IsInRole("Admin"))
                                 {
-                                        
-                                        <a class="btn btn-outline-dark" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                        <a class="btn btn-outline-dark" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    <a class="btn btn-outline-dark" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <a class="btn btn-outline-dark" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                                 }
-                                 else if (User.Identity.IsAuthenticated){   
-                                     <form asp-controller="UserBooks" asp-action="Create" method="post">
+                                else if (User.Identity.IsAuthenticated)
+                                {
+                                    <form asp-controller="UserBooks" asp-action="Create" method="post">
                                         <input type="hidden" name="id" value="@item.Id" />
                                         <input type="hidden" name="AppUser" value="@User.Identity.Name" />
-                                            <button type="submit" class="btn btn-outline-dark">Add to My Books</button>
+                                        <button type="submit" class="btn btn-outline-dark">Add to My Books</button>
                                     </form>
-                                 }
-                        }
-                    </div>
+                                }
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
+
 @section scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>

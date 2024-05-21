@@ -1,5 +1,4 @@
-﻿
-﻿@using Microsoft.AspNetCore.Identity
+﻿﻿@using Microsoft.AspNetCore.Identity
 @model IEnumerable<BookProject1.Models.UserBooks>
 
 @{
@@ -59,8 +58,8 @@
 <h1>@userName's books</h1>
 
 <div class="row mt-4">
-@foreach (var item in Model)
-{
+    @foreach (var item in Model)
+    {
         <div class="col-md-4 mb-4">
             <div class="card h-100 ">
                 <div style="height: 600px; overflow: hidden;">
@@ -90,17 +89,17 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <div>
-                                
+
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    
+
                                     <a class="btn btn-outline-dark" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    
+
                                 }
 
-                                    <a class="btn btn-outline-dark" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                    <a href="@item.Book.DownloadUrl" class="btn btn-outline-dark" download>Read</a>
-                                    <a asp-controller="Reviews" asp-action="Create" asp-route-id="@item.Book.Id" class="btn btn-outline-info">Add review</a>
+                                <a class="btn btn-outline-dark" asp-action="Delete" asp-route-id="@item.Id">Remove</a>
+                                <a href="@item.Book.DownloadUrl" class="btn btn-outline-dark" download>Read</a>
+                                <a asp-controller="Reviews" asp-action="Create" asp-route-id="@item.Book.Id" class="btn btn-outline-info">Add review</a>
                             </div>
                         }
                     </div>

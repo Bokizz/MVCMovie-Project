@@ -6,125 +6,192 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
-<h1>Details</h1>
-
-<div>
-    <h4>Book</h4>
-    <hr />
-    <dl>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.YearPublished)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.YearPublished)
-        </dd>
-        <dt class="col-sm-2">
-            <a>Rating:</a>
-        </dt>
-        <dd class="col-sm-10">
-            @{
-                int sumOfRatings = 0;
-                foreach (var item in Model.Reviews)
-                {
-                    sumOfRatings += item.Rating;
-                }
-                int averageRating = 0;
-                if (Model.Reviews.Count > 0)
-                {
-                    averageRating = sumOfRatings / Model.Reviews.Count;
-                }
-                for (int i = 0; i < averageRating; i++)
-                {
-                    <span class="fa fa-star checked"></span>
-                }
-                <br />
-            }
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.NumPages)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.NumPages)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.BookGenres)
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var genre in Model.BookGenres)
-            {
-                <a>
-                    @genre.Genre.GenreName
-                </a> <br />
-            }
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Publisher)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Publisher)
-        </dd>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.DownloadUrl)
-            </dt>
-            <dd class="col-sm-10">
-                <a href="@Html.DisplayFor(model => model.DownloadUrl)">Download</a>
-            </dd>
-        }
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Author.FullName)
-        </dd>
-        <h4 class="mt-5">Reviews</h4>
-        <hr />
-        @if (Model.Reviews != null && Model.Reviews.Count > 0)
-        {
-            <div class="list-group">
-                @foreach (var review in Model.Reviews)
-                {
-                    <div class="list-group-item">
-                        <h5 class="mb-1">@review.AppUser</h5>
-                        <p class="mb-1">@review.Comment</p>
-                        <small>Rating: @review.Rating</small>
-                    </div>
-                }
-            </div>
-
-        }
-        else
-        {
-            <p>No reviews yet.</p>
-        }
-    </dl>
-</div>
-<div class="btn-group-vertical">
-    <td>
-    </td>
-    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-    {
-        <a class="btn btn-info btn-sm" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
-    }|
-    <a class="btn btn-secondary btn-sm" asp-action="Index">Back to List</a>
-</div>
-
 <style>
-    .checked {
-        color: orange;
+    .container-lg {
+        padding: 20px; /* Add padding to the container */
+        overflow-x: hidden; /* Hide horizontal overflow */
+    }
+
+    .card {
+        width: 100%; /* Ensure cards take full width */
+        max-width: 800px; /* Set maximum width of each card */
+        display: flex; /* Use flexbox for layout */
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 20px; /* Add space between cards */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+        .card:hover {
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02);
+        }
+
+    .card-img-top {
+        width: 200px; /* Set width of the image */
+        height: auto; /* Maintain aspect ratio */
+        border-top-left-radius: 20px; /* Rounded corners for image */
+        border-bottom-left-radius: 20px;
+        flex-shrink: 0; /* Don't allow image to shrink */
+    }
+
+    .card-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-grow: 1; /* Allow content to grow and take remaining space */
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .card-text {
+        margin-bottom: 10px;
+    }
+
+    .list-group-item {
+        border: none;
+        padding: 5px 0;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+        .button-container a {
+            margin-left: 10px;
+        }
+
+    .smooth-transition {
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    h1,
+    .btn-outline-dark,
+    form {
+        margin-bottom: 20px;
     }
 </style>
 
+<div class="container-lg">
+    <h1>Details</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Movie</h4>
+            <hr />
+            <dl>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Title)
+                </dt>
+                <dd class="col-sm-10 card-text">
+                    @Html.DisplayFor(model => model.Title)
+                </dd>
+                <dt class="col-sm-2">
+                    Release Date
+                </dt>
+                <dd class="col-sm-10 card-text">
+                    @Html.DisplayFor(model => model.YearPublished)
+                </dd>
+                <dt class="col-sm-2">
+                    <a>Rating:</a>
+                </dt>
+                <dd class="col-sm-10 card-text">
+                    @{
+                        int sumOfRatings = 0;
+                        foreach (var item in Model.Reviews)
+                        {
+                            sumOfRatings += item.Rating;
+                        }
+                        int averageRating = 0;
+                        if (Model.Reviews.Count > 0)
+                        {
+                            averageRating = sumOfRatings / Model.Reviews.Count;
+                        }
+                        for (int i = 0; i < averageRating; i++)
+                        {
+                            <span class="fa fa-star checked"></span>
+                        }
+                        <br />
+                    }
+                </dd>
+                <dt class="col-sm-2">
+                    Box Office
+                </dt>
+                <dd class="col-sm-10 card-text">
+                    $@Html.DisplayFor(model => model.NumPages) million
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.BookGenres)
+                </dt>
+                <dd class="col-sm-10 card-text">
+                    @foreach (var genre in Model.BookGenres)
+                    {
+                        <a>
+                            @genre.Genre.GenreName
+                        </a> <br />
+                    }
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd class="col-sm-10 card-text">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+                <dt class="col-sm-2">
+                  Distributed by
+                </dt>
+                <dd class="col-sm-10 card-text">
+                    @Html.DisplayFor(model => model.Publisher)
+                </dd>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.DownloadUrl)
+                    </dt>
+                    <dd class="col-sm-10 card-text">
+                        <a href="@Html.DisplayFor(model => model.DownloadUrl)">Watch</a>
+                    </dd>
+                }
+                <dt class="col-sm-2">
+                    Director
+                </dt>
+                <dd class="col-sm-10 card-text">
+                    @Html.DisplayFor(model => model.Author.FullName)
+                </dd>
+            </dl>
+            <h4 class="mt-5 card-title">Reviews</h4>
+            <hr />
+            @if (Model.Reviews != null && Model.Reviews.Count > 0)
+            {
+                <div class="list-group">
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">@review.AppUser</h5>
+                            <p class="mb-1">@review.Comment</p>
+                            <small>Rating: @review.Rating</small>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>No reviews yet.</p>
+            }
+            <div class="button-container">
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <a class="btn btn-info btn-sm smooth-transition" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+                }
+                <a class="btn btn-secondary btn-sm smooth-transition" asp-action="Index">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>

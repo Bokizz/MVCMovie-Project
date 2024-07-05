@@ -18,7 +18,8 @@ html {
 }
 
 body {
-    background-image: url('/imgs/logobook.png');
-    background-repeat: no-repeat;
-    margin-bottom: 60px;
+    background-image: url('/imgs/netflix1.png');
+    width:100vw;
+    height:100vh;
+    background-repeat:no-repeat;
 }

@@ -55,7 +55,7 @@
     var userName = User.Identity.Name;
 }
 
-<h1>@userName's books</h1>
+<h1>@userName's movies</h1>
 
 <div class="row mt-4">
     @foreach (var item in Model)
@@ -68,9 +68,9 @@
                 <div class="card-body">
                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Book.Title)</h5>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Author: @Html.DisplayFor(modelItem => item.Book.Author.FullName)</li>
-                        <li class="list-group-item">Published: @Html.DisplayFor(modelItem => item.Book.YearPublished)</li>
-                        <li class="list-group-item">Publisher: @Html.DisplayFor(modelItem => item.Book.Publisher)</li>
+                        <li class="list-group-item">Director: @Html.DisplayFor(modelItem => item.Book.Author.FullName)</li>
+                        <li class="list-group-item">Release Date: @Html.DisplayFor(modelItem => item.Book.YearPublished)</li>
+                        <li class="list-group-item">Distributed by: @Html.DisplayFor(modelItem => item.Book.Publisher)</li>
                         <li class="list-group-item">
                             Genres:
                             @foreach (var genre in item.Book.BookGenres)
@@ -98,7 +98,7 @@
                                 }
 
                                 <a class="btn btn-outline-dark" asp-action="Delete" asp-route-id="@item.Id">Remove</a>
-                                <a href="@item.Book.DownloadUrl" class="btn btn-outline-dark" download>Read</a>
+                                <a href="@item.Book.DownloadUrl" class="btn btn-outline-dark" download>Watch</a>
                                 <a asp-controller="Reviews" asp-action="Create" asp-route-id="@item.Book.Id" class="btn btn-outline-info">Add review</a>
                             </div>
                         }

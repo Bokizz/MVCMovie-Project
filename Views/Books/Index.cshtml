@@ -78,7 +78,7 @@
 </style>
 
 <div class="container-lg">
-    <h1 class="mt-5 text-center b">BookNogging's Catalog</h1>
+    <h1 class="mt-5 text-center b">Movie Catalog</h1>
     <br />
     <br />
 
@@ -124,12 +124,13 @@
                                 <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
-                                        <strong>Author:</strong><a asp-controller="Authors" asp-action="Details" asp-route-id="@item.AuthorId">
+                                        <strong>Director:</strong><a asp-controller="Authors" asp-action="Details" asp-route-id="@item.AuthorId">
                                             @Html.DisplayFor(modelItem => item.Author.FullName)
                                         </a>
                                     </li>
-                                    <li class="list-group-item"><strong>Published:</strong> @Html.DisplayFor(modelItem => item.YearPublished)</li>
-                                    <li class="list-group-item"><strong>Publisher:</strong> @Html.DisplayFor(modelItem => item.Publisher)</li>
+                                    <li class="list-group-item"><strong>Release Date:</strong> @Html.DisplayFor(modelItem => item.YearPublished)</li>
+                                    <li class="list-group-item"><strong>Distributed by:</strong> @Html.DisplayFor(modelItem => item.Publisher)</li>
+                                    <li class="list-group-item"><strong>Box Office:$</strong>@Html.DisplayFor(modelItem => item.NumPages) <strong> million</strong></li>
                                     <li class="list-group-item">
                                         <strong>Genres:</strong>
                                         @foreach (var genre in item.BookGenres)
@@ -160,7 +161,7 @@
                                     <form asp-controller="UserBooks" asp-action="Create" method="post">
                                         <input type="hidden" name="id" value="@item.Id" />
                                         <input type="hidden" name="AppUser" value="@User.Identity.Name" />
-                                        <button type="submit" class="btn btn-outline-dark">Add to My Books</button>
+                                        <button type="submit" class="btn btn-outline-dark">Add to My Movies</button>
                                     </form>
                                 }
                             }
